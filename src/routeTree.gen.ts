@@ -9,69 +9,27 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
-import { Route as NewsRouteImport } from './routes/news'
-import { Route as LoansRouteImport } from './routes/loans'
-import { Route as InvestorRelationsRouteImport } from './routes/investor-relations'
-import { Route as FaqsRouteImport } from './routes/faqs'
-import { Route as EmiCalculatorRouteImport } from './routes/emi-calculator'
-import { Route as CsrRouteImport } from './routes/csr'
-import { Route as ContactRouteImport } from './routes/contact'
-import { Route as CareersRouteImport } from './routes/careers'
-import { Route as BranchesRouteImport } from './routes/branches'
-import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AboutRouteImport } from './routes/about'
+import { Route as AdminRouteImport } from './routes/admin'
+import { Route as BranchesRouteImport } from './routes/branches'
+import { Route as CareersRouteImport } from './routes/careers'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as CsrRouteImport } from './routes/csr'
+import { Route as EmiCalculatorRouteImport } from './routes/emi-calculator'
+import { Route as FaqsRouteImport } from './routes/faqs'
+import { Route as InvestorRelationsRouteImport } from './routes/investor-relations'
+import { Route as LoansRouteImport } from './routes/loans'
+import { Route as NewsRouteImport } from './routes/news'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as AdminInvestorRelationsRouteImport } from './routes/admin.investor-relations'
+import { Route as AdminLoginRouteImport } from './routes/admin.login'
 import { Route as LoansIndexRouteImport } from './routes/loans.index'
 import { Route as LoansSlugRouteImport } from './routes/loans.$slug'
 
-const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
-  id: '/sitemap.xml',
-  path: '/sitemap.xml',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const NewsRoute = NewsRouteImport.update({
-  id: '/news',
-  path: '/news',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LoansRoute = LoansRouteImport.update({
-  id: '/loans',
-  path: '/loans',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const InvestorRelationsRoute = InvestorRelationsRouteImport.update({
-  id: '/investor-relations',
-  path: '/investor-relations',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const FaqsRoute = FaqsRouteImport.update({
-  id: '/faqs',
-  path: '/faqs',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const EmiCalculatorRoute = EmiCalculatorRouteImport.update({
-  id: '/emi-calculator',
-  path: '/emi-calculator',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CsrRoute = CsrRouteImport.update({
-  id: '/csr',
-  path: '/csr',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ContactRoute = ContactRouteImport.update({
-  id: '/contact',
-  path: '/contact',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CareersRoute = CareersRouteImport.update({
-  id: '/careers',
-  path: '/careers',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const BranchesRoute = BranchesRouteImport.update({
-  id: '/branches',
-  path: '/branches',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -79,10 +37,70 @@ const AboutRoute = AboutRouteImport.update({
   path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => rootRouteImport,
+} as any)
+const BranchesRoute = BranchesRouteImport.update({
+  id: '/branches',
+  path: '/branches',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CareersRoute = CareersRouteImport.update({
+  id: '/careers',
+  path: '/careers',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CsrRoute = CsrRouteImport.update({
+  id: '/csr',
+  path: '/csr',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EmiCalculatorRoute = EmiCalculatorRouteImport.update({
+  id: '/emi-calculator',
+  path: '/emi-calculator',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FaqsRoute = FaqsRouteImport.update({
+  id: '/faqs',
+  path: '/faqs',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InvestorRelationsRoute = InvestorRelationsRouteImport.update({
+  id: '/investor-relations',
+  path: '/investor-relations',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoansRoute = LoansRouteImport.update({
+  id: '/loans',
+  path: '/loans',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NewsRoute = NewsRouteImport.update({
+  id: '/news',
+  path: '/news',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminInvestorRelationsRoute = AdminInvestorRelationsRouteImport.update({
+  id: '/investor-relations',
+  path: '/investor-relations',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminLoginRoute = AdminLoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => AdminRoute,
 } as any)
 const LoansIndexRoute = LoansIndexRouteImport.update({
   id: '/',
@@ -98,6 +116,7 @@ const LoansSlugRoute = LoansSlugRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/admin': typeof AdminRouteWithChildren
   '/branches': typeof BranchesRoute
   '/careers': typeof CareersRoute
   '/contact': typeof ContactRoute
@@ -108,12 +127,15 @@ export interface FileRoutesByFullPath {
   '/loans': typeof LoansRouteWithChildren
   '/news': typeof NewsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/admin/investor-relations': typeof AdminInvestorRelationsRoute
+  '/admin/login': typeof AdminLoginRoute
   '/loans/$slug': typeof LoansSlugRoute
   '/loans/': typeof LoansIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/admin': typeof AdminRouteWithChildren
   '/branches': typeof BranchesRoute
   '/careers': typeof CareersRoute
   '/contact': typeof ContactRoute
@@ -123,6 +145,8 @@ export interface FileRoutesByTo {
   '/investor-relations': typeof InvestorRelationsRoute
   '/news': typeof NewsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/admin/investor-relations': typeof AdminInvestorRelationsRoute
+  '/admin/login': typeof AdminLoginRoute
   '/loans/$slug': typeof LoansSlugRoute
   '/loans': typeof LoansIndexRoute
 }
@@ -130,6 +154,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/admin': typeof AdminRouteWithChildren
   '/branches': typeof BranchesRoute
   '/careers': typeof CareersRoute
   '/contact': typeof ContactRoute
@@ -140,6 +165,8 @@ export interface FileRoutesById {
   '/loans': typeof LoansRouteWithChildren
   '/news': typeof NewsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/admin/investor-relations': typeof AdminInvestorRelationsRoute
+  '/admin/login': typeof AdminLoginRoute
   '/loans/$slug': typeof LoansSlugRoute
   '/loans/': typeof LoansIndexRoute
 }
@@ -148,6 +175,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/admin'
     | '/branches'
     | '/careers'
     | '/contact'
@@ -158,12 +186,15 @@ export interface FileRouteTypes {
     | '/loans'
     | '/news'
     | '/sitemap.xml'
+    | '/admin/investor-relations'
+    | '/admin/login'
     | '/loans/$slug'
     | '/loans/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/about'
+    | '/admin'
     | '/branches'
     | '/careers'
     | '/contact'
@@ -173,12 +204,15 @@ export interface FileRouteTypes {
     | '/investor-relations'
     | '/news'
     | '/sitemap.xml'
+    | '/admin/investor-relations'
+    | '/admin/login'
     | '/loans/$slug'
     | '/loans'
   id:
     | '__root__'
     | '/'
     | '/about'
+    | '/admin'
     | '/branches'
     | '/careers'
     | '/contact'
@@ -189,6 +223,8 @@ export interface FileRouteTypes {
     | '/loans'
     | '/news'
     | '/sitemap.xml'
+    | '/admin/investor-relations'
+    | '/admin/login'
     | '/loans/$slug'
     | '/loans/'
   fileRoutesById: FileRoutesById
@@ -196,6 +232,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  AdminRoute: typeof AdminRouteWithChildren
   BranchesRoute: typeof BranchesRoute
   CareersRoute: typeof CareersRoute
   ContactRoute: typeof ContactRoute
@@ -210,74 +247,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/sitemap.xml': {
-      id: '/sitemap.xml'
-      path: '/sitemap.xml'
-      fullPath: '/sitemap.xml'
-      preLoaderRoute: typeof SitemapDotxmlRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/news': {
-      id: '/news'
-      path: '/news'
-      fullPath: '/news'
-      preLoaderRoute: typeof NewsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/loans': {
-      id: '/loans'
-      path: '/loans'
-      fullPath: '/loans'
-      preLoaderRoute: typeof LoansRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/investor-relations': {
-      id: '/investor-relations'
-      path: '/investor-relations'
-      fullPath: '/investor-relations'
-      preLoaderRoute: typeof InvestorRelationsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/faqs': {
-      id: '/faqs'
-      path: '/faqs'
-      fullPath: '/faqs'
-      preLoaderRoute: typeof FaqsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/emi-calculator': {
-      id: '/emi-calculator'
-      path: '/emi-calculator'
-      fullPath: '/emi-calculator'
-      preLoaderRoute: typeof EmiCalculatorRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/csr': {
-      id: '/csr'
-      path: '/csr'
-      fullPath: '/csr'
-      preLoaderRoute: typeof CsrRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/contact': {
-      id: '/contact'
-      path: '/contact'
-      fullPath: '/contact'
-      preLoaderRoute: typeof ContactRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/careers': {
-      id: '/careers'
-      path: '/careers'
-      fullPath: '/careers'
-      preLoaderRoute: typeof CareersRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/branches': {
-      id: '/branches'
-      path: '/branches'
-      fullPath: '/branches'
-      preLoaderRoute: typeof BranchesRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -287,12 +261,96 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/branches': {
+      id: '/branches'
+      path: '/branches'
+      fullPath: '/branches'
+      preLoaderRoute: typeof BranchesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/careers': {
+      id: '/careers'
+      path: '/careers'
+      fullPath: '/careers'
+      preLoaderRoute: typeof CareersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/csr': {
+      id: '/csr'
+      path: '/csr'
+      fullPath: '/csr'
+      preLoaderRoute: typeof CsrRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/emi-calculator': {
+      id: '/emi-calculator'
+      path: '/emi-calculator'
+      fullPath: '/emi-calculator'
+      preLoaderRoute: typeof EmiCalculatorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/faqs': {
+      id: '/faqs'
+      path: '/faqs'
+      fullPath: '/faqs'
+      preLoaderRoute: typeof FaqsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/investor-relations': {
+      id: '/investor-relations'
+      path: '/investor-relations'
+      fullPath: '/investor-relations'
+      preLoaderRoute: typeof InvestorRelationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/loans': {
+      id: '/loans'
+      path: '/loans'
+      fullPath: '/loans'
+      preLoaderRoute: typeof LoansRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/news': {
+      id: '/news'
+      path: '/news'
+      fullPath: '/news'
+      preLoaderRoute: typeof NewsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/investor-relations': {
+      id: '/admin/investor-relations'
+      path: '/investor-relations'
+      fullPath: '/admin/investor-relations'
+      preLoaderRoute: typeof AdminInvestorRelationsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/login': {
+      id: '/admin/login'
+      path: '/login'
+      fullPath: '/admin/login'
+      preLoaderRoute: typeof AdminLoginRouteImport
+      parentRoute: typeof AdminRoute
     }
     '/loans/': {
       id: '/loans/'
@@ -311,6 +369,18 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AdminRouteChildren {
+  AdminInvestorRelationsRoute: typeof AdminInvestorRelationsRoute
+  AdminLoginRoute: typeof AdminLoginRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminInvestorRelationsRoute: AdminInvestorRelationsRoute,
+  AdminLoginRoute: AdminLoginRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
 interface LoansRouteChildren {
   LoansSlugRoute: typeof LoansSlugRoute
   LoansIndexRoute: typeof LoansIndexRoute
@@ -326,6 +396,7 @@ const LoansRouteWithChildren = LoansRoute._addFileChildren(LoansRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  AdminRoute: AdminRouteWithChildren,
   BranchesRoute: BranchesRoute,
   CareersRoute: CareersRoute,
   ContactRoute: ContactRoute,
@@ -340,3 +411,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

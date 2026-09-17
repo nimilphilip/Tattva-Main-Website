@@ -42,7 +42,6 @@ export function SiteHeader() {
           <div className="flex items-center gap-4">
             <Link to="/contact" className="hover:text-gold transition">Contact</Link>
             <Link to="/faqs" className="hover:text-gold transition">FAQs</Link>
-            <Link to="/news" className="hover:text-gold transition">News & Media</Link>
             <Link to="/csr" className="hover:text-gold transition">CSR</Link>
           </div>
         </div>
@@ -51,13 +50,13 @@ export function SiteHeader() {
       <header
         className={`sticky top-0 z-50 transition-all ${
           scrolled
-            ? "glass-light shadow-soft border-b border-border/60"
-            : "bg-background/60 backdrop-blur"
+            ? "bg-navy-deep/95 shadow-soft border-b border-white/10 backdrop-blur"
+            : "bg-navy-deep/90 border-b border-white/10 backdrop-blur"
         }`}
       >
-        <div className="container-x flex h-20 md:h-24 items-center justify-between gap-4">
+        <div className="container-x flex h-24 md:h-28 items-center justify-between gap-4">
           <Link to="/" className="flex items-center gap-2 shrink-0">
-            <Logo />
+            <Logo className="h-24 w-24 md:h-28 md:w-28" />
           </Link>
 
           <nav className="hidden lg:flex items-center gap-1">
@@ -66,7 +65,7 @@ export function SiteHeader() {
               onMouseEnter={() => setLoansOpen(true)}
               onMouseLeave={() => setLoansOpen(false)}
             >
-              <button className="flex items-center gap-1 px-4 py-2 text-sm font-medium text-foreground hover:text-primary transition rounded-full">
+              <button className="flex items-center gap-1 px-4 py-2 text-sm font-medium text-white/90 hover:text-gold transition rounded-full">
                 Loans <ChevronDown className="h-4 w-4" />
               </button>
               {loansOpen && (
@@ -96,8 +95,8 @@ export function SiteHeader() {
               <Link
                 key={n.to}
                 to={n.to}
-                className="px-4 py-2 text-sm font-medium text-foreground hover:text-primary transition rounded-full"
-                activeProps={{ className: "px-4 py-2 text-sm font-semibold text-primary rounded-full bg-primary/5" }}
+                className="px-4 py-2 text-sm font-medium text-white/90 hover:text-gold transition rounded-full"
+                activeProps={{ className: "px-4 py-2 text-sm font-semibold text-gold rounded-full bg-white/10" }}
               >
                 {n.label}
               </Link>
@@ -105,7 +104,7 @@ export function SiteHeader() {
           </nav>
 
           <div className="flex items-center gap-2">
-            <button className="hidden md:grid h-10 w-10 place-items-center rounded-full hover:bg-muted transition" aria-label="Search">
+            <button className="hidden md:grid h-10 w-10 place-items-center rounded-full text-white hover:bg-white/10 transition" aria-label="Search">
               <Search className="h-4 w-4" />
             </button>
             <Link to="/contact" className="hidden md:inline-flex">
@@ -116,7 +115,7 @@ export function SiteHeader() {
             </Link>
             <Sheet>
               <SheetTrigger asChild>
-                <button className="lg:hidden grid h-10 w-10 place-items-center rounded-full hover:bg-muted" aria-label="Open menu">
+                <button className="lg:hidden grid h-10 w-10 place-items-center rounded-full text-white hover:bg-white/10" aria-label="Open menu">
                   <Menu className="h-5 w-5" />
                 </button>
               </SheetTrigger>
@@ -135,7 +134,7 @@ function MobileNav() {
   return (
     <div className="flex flex-col h-full">
       <div className="p-5 border-b border-border">
-        <Logo />
+        <Logo className="h-20 w-20" />
       </div>
       <div className="flex-1 overflow-y-auto p-4 space-y-1">
         <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground px-3 pt-3 pb-1">Loans</div>
@@ -153,7 +152,7 @@ function MobileNav() {
             {n.label}
           </Link>
         ))}
-        {[{label:"News & Media", to:"/news"},{label:"CSR", to:"/csr"},{label:"FAQs", to:"/faqs"},{label:"Contact", to:"/contact"}].map(n => (
+        {[{label:"CSR", to:"/csr"},{label:"FAQs", to:"/faqs"},{label:"Contact", to:"/contact"}].map(n => (
           <Link key={n.to} to={n.to} className="block rounded-xl px-3 py-2.5 text-sm font-medium hover:bg-muted">{n.label}</Link>
         ))}
       </div>
@@ -165,14 +164,14 @@ function MobileNav() {
   );
 }
 
-import logoAsset from "@/assets/tattva-logo.png.asset.json";
+import logoAsset from "../../../Images/Tattva Logo (2).png";
 
-export function Logo({ mono = false }: { mono?: boolean }) {
+export function Logo({ className = "h-16 w-16 md:h-20 md:w-20" }: { className?: string }) {
   return (
     <img
-      src={logoAsset.url}
+      src={logoAsset}
       alt="Tattva Fincorp Limited"
-      className={`h-14 md:h-16 w-auto object-contain ${mono ? "brightness-0 invert" : ""}`}
+      className={`${className} object-contain drop-shadow-md`}
     />
   );
 }

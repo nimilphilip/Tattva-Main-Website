@@ -23,6 +23,35 @@ export const BRANCHES: Branch[] = [
   { city: "Madurai", state: "Tamil Nadu", addr: "Second Floor, Rakesh Tower, Subramanya Pillai Street, SS Colony, Bypass Road, Madurai – 625016", hours: TN_HOURS },
 ];
 
+export const BRANCH_COORDINATES: Record<string, { lat: number; lon: number }> = {
+  Ernakulam: { lat: 9.9997, lon: 76.3205 },
+  Thrissur: { lat: 10.5276, lon: 76.2144 },
+  Pattambi: { lat: 10.8051, lon: 76.1954 },
+  Palakkad: { lat: 10.7867, lon: 76.6548 },
+  Chalakudy: { lat: 10.3001, lon: 76.3358 },
+  Perinthalmanna: { lat: 10.9762, lon: 76.2252 },
+  Thodupuzha: { lat: 9.8947, lon: 76.7186 },
+  Kozhikode: { lat: 11.2792, lon: 75.7667 },
+  Thiruvananthapuram: { lat: 8.4927, lon: 76.9487 },
+  Coimbatore: { lat: 11.0056, lon: 76.9532 },
+  Madurai: { lat: 9.9229, lon: 78.1179 },
+};
+
+export function distanceInKm(
+  from: { lat: number; lon: number },
+  to: { lat: number; lon: number },
+) {
+  const earthRadiusKm = 6371;
+  const toRadians = (degrees: number) => (degrees * Math.PI) / 180;
+  const latDifference = toRadians(to.lat - from.lat);
+  const lonDifference = toRadians(to.lon - from.lon);
+  const a =
+    Math.sin(latDifference / 2) ** 2 +
+    Math.cos(toRadians(from.lat)) * Math.cos(toRadians(to.lat)) * Math.sin(lonDifference / 2) ** 2;
+
+  return earthRadiusKm * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
 export const CONTACT = {
   corporatePhone: "+91 484 2630090",
   registeredPhone: "0487 7110000",

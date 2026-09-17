@@ -1,12 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import {
   ArrowRight, ShieldCheck, Zap, BadgePercent, MapPin,
   ChevronRight, Search, TrendingUp, HeadphonesIcon,
-  CheckCircle2, FileText, Wallet, Sparkles,
+  CheckCircle2, FileText, Wallet, Sparkles, Navigation, ExternalLink,
 } from "lucide-react";
 import { LOANS } from "@/lib/loans";
-import { BRANCHES } from "@/lib/branches";
+import { BRANCHES, BRANCH_COORDINATES } from "@/lib/branches";
 import { FAQS } from "@/lib/faqs";
 import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
@@ -328,24 +328,140 @@ function CtaBanner() {
 
 /* ---------- Branch preview ---------- */
 function BranchPreview() {
+  const [selectedBranch, setSelectedBranch] = useState(BRANCHES[0]);
+  const [search, setSearch] = useState("");
+
+  const displayedList = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    if (!q) return BRANCHES.slice(0, 5);
+    const matched = BRANCHES.filter(
+      (b) => b.city.toLowerCase().includes(q) || b.addr.toLowerCase().includes(q)
+    );
+    return matched.length > 0 ? matched : BRANCHES.slice(0, 5);
+  }, [search]);
+
+  const coords = BRANCH_COORDINATES[selectedBranch.city] ?? { lat: 9.9997, lon: 76.3205 };
+
   return (
-    <Section eyebrow="Branch Locator" title="Find your nearest Tattva branch."
-      subtitle="11 branches across Kerala and Tamil Nadu. Walk in for gold loans, KYC and personal advice.">
-      <div className="rounded-3xl border border-border bg-card p-6 md:p-8 grid md:grid-cols-3 gap-5">
-        <div className="md:col-span-1 space-y-3">
-          <Input placeholder="Enter city or PIN code" className="h-12 rounded-xl" />
-          <Link to="/branches"><Button className="w-full h-12 rounded-xl bg-gradient-brand text-white">Search branches</Button></Link>
-          <div className="pt-2 space-y-2 text-sm">
-            {BRANCHES.slice(0, 4).map(b => (
-              <div key={b.city} className="flex items-center gap-2 text-muted-foreground"><MapPin className="h-4 w-4 text-primary" /> {b.city}{b.label ? ` — ${b.label}` : ""}</div>
-            ))}
+    <Section
+      eyebrow="Branch Locator"
+      title="Find your nearest Tattva branch."
+      subtitle="11 branches across Kerala and Tamil Nadu. Walk in for gold loans, KYC and personal advice."
+      action={
+        <Link to="/branches" className="text-sm font-semibold text-primary hover:underline flex items-center gap-1">
+          Explore all 11 branches <ChevronRight className="h-4 w-4" />
+        </Link>
+      }
+    >
+      <div className="rounded-3xl border border-border bg-card p-6 md:p-8 grid md:grid-cols-3 gap-6 shadow-soft items-stretch">
+        <div className="md:col-span-1 flex flex-col justify-between space-y-4">
+          <div className="space-y-3">
+            <Input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Enter city or PIN code"
+              className="h-12 rounded-xl"
+            />
+            <Link to="/branches">
+              <Button className="w-full h-12 rounded-xl bg-gradient-brand text-white">
+                Search all branches
+              </Button>
+            </Link>
+            <div className="pt-2 space-y-1 text-sm">
+              <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">
+                Click a branch to preview
+              </div>
+              {displayedList.slice(0, 4).map((b) => {
+                const isSelected = selectedBranch.city === b.city;
+                return (
+                  <button
+                    key={b.city}
+                    type="button"
+                    onClick={() => setSelectedBranch(b)}
+                    className={`w-full flex items-center justify-between p-2.5 rounded-xl transition text-left text-sm ${
+                      isSelected
+                        ? "bg-primary/10 text-primary font-semibold ring-1 ring-primary/30"
+                        : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                    }`}
+                  >
+                    <span className="flex items-center gap-2 truncate">
+                      <MapPin className={`h-4 w-4 shrink-0 ${isSelected ? "text-primary" : "text-muted-foreground"}`} />
+                      <span className="truncate">{b.city}{b.label ? ` — ${b.label}` : ""}</span>
+                    </span>
+                    {isSelected && (
+                      <span className="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-primary text-white shrink-0 ml-1">
+                        Map
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="pt-3 border-t border-border">
+            <Link
+              to="/branches"
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary hover:underline"
+            >
+              <span>View all 11 branches on locator</span>
+              <ArrowRight className="h-3.5 w-3.5" />
+            </Link>
           </div>
         </div>
-        <div className="md:col-span-2 h-72 rounded-2xl bg-gradient-to-br from-primary/5 to-gold/10 bg-dots grid place-items-center border border-border relative overflow-hidden">
-          <div className="text-center px-6">
-            <MapPin className="h-10 w-10 text-primary mx-auto" />
-            <div className="mt-3 font-display font-bold text-lg">Interactive map</div>
-            <div className="text-sm text-muted-foreground mt-1">Explore all 11 Tattva branches on the full locator.</div>
+
+        <div className="md:col-span-2 h-[340px] md:h-[400px] rounded-2xl border border-border relative overflow-hidden flex flex-col shadow-inner bg-muted">
+          {/* Map Top Bar */}
+          <div className="px-4 py-2.5 bg-navy-deep text-white flex items-center justify-between gap-3 border-b border-white/10 z-10 shrink-0">
+            <div className="flex items-center gap-2 min-w-0">
+              <MapPin className="h-4 w-4 text-gold shrink-0" />
+              <div className="font-display font-bold text-xs md:text-sm text-white truncate">
+                {selectedBranch.city} {selectedBranch.label ? `— ${selectedBranch.label}` : "Branch"}
+              </div>
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-white/10 text-white/80 hidden sm:inline shrink-0">
+                {selectedBranch.state}
+              </span>
+            </div>
+            <a
+              href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`Tattva Fincorp ${selectedBranch.addr}`)}`}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-gold text-navy-deep text-[11px] font-semibold hover:opacity-90 transition shrink-0"
+            >
+              <span>Open in Maps</span>
+              <ExternalLink className="h-3 w-3" />
+            </a>
+          </div>
+
+          {/* Google Maps iframe */}
+          <div className="relative flex-1 w-full bg-muted overflow-hidden">
+            <iframe
+              key={selectedBranch.city}
+              title={`Google Map preview for Tattva Fincorp ${selectedBranch.city} branch`}
+              src={`https://maps.google.com/maps?q=${coords.lat},${coords.lon}+(${encodeURIComponent(`Tattva Fincorp ${selectedBranch.city}`)})&t=&z=14&ie=UTF8&iwloc=B&output=embed`}
+              className="w-full h-full border-0"
+              loading="lazy"
+              allowFullScreen
+            />
+
+            {/* Bottom floating info badge */}
+            <div className="absolute bottom-3 left-3 right-3 pointer-events-none">
+              <div className="pointer-events-auto bg-card/95 backdrop-blur-md border border-border shadow-elevated rounded-xl p-3 flex items-center justify-between gap-3 text-xs">
+                <div className="min-w-0">
+                  <div className="font-semibold text-foreground truncate">{selectedBranch.city} Branch</div>
+                  <div className="text-muted-foreground truncate text-[11px]">{selectedBranch.addr}</div>
+                </div>
+                <a
+                  href={`https://www.google.com/maps/dir/?api=1&destination=${coords.lat},${coords.lon}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-1 rounded-lg bg-gradient-brand text-white px-3 py-1.5 font-semibold shrink-0 shadow-soft hover:opacity-90 transition"
+                >
+                  <Navigation className="h-3 w-3" />
+                  <span>Directions</span>
+                </a>
+              </div>
+            </div>
           </div>
         </div>
       </div>

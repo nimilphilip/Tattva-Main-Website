@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useState, useEffect, useRef } from "react";
 import { PageHero } from "@/components/site/PageHero";
 import { Heart, Target, Users, Sparkles, ShieldCheck, MapPin, Building2, Handshake } from "lucide-react";
 import { LOANS } from "@/lib/loans";
@@ -26,6 +27,73 @@ const VALUES = [
   { icon: Target, title: "Work ethic", body: "Exceptional work ethics and disciplined credit practices guide every decision we make." },
   { icon: Users, title: "Local relationships", body: "Branch teams who know their neighbourhoods and stay with you through the loan." },
 ];
+
+function StatCard({ value, label }: { value: number; label: string }) {
+  const [count, setCount] = useState(0);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    if (typeof IntersectionObserver === "undefined") {
+      setCount(value);
+      return;
+    }
+
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          const duration = 1400;
+          const t0 = performance.now();
+          const step = (t: number) => {
+            const p = Math.min(1, (t - t0) / duration);
+            // Ease out cubic curve
+            const current = Math.round(value * (1 - Math.pow(1 - p, 3)));
+            setCount(current);
+            if (p < 1) {
+              requestAnimationFrame(step);
+            } else {
+              setCount(value);
+            }
+          };
+          requestAnimationFrame(step);
+          io.disconnect();
+        }
+      },
+      { threshold: 0.2 }
+    );
+
+    io.observe(el);
+    return () => io.disconnect();
+  }, [value]);
+
+  return (
+    <div
+      ref={ref}
+      className="rounded-3xl bg-gradient-brand text-white p-6 shadow-soft flex flex-col items-center justify-center text-center"
+    >
+      <div className="text-3xl md:text-4xl font-display font-extrabold">{count}</div>
+      <div className="mt-1 text-white/80 text-sm">{label}</div>
+    </div>
+  );
+}
+
+function Section({ title, subtitle, children }: any) {
+  return (
+    <section className="py-16 md:py-24">
+      <div className="container-x">
+        {title && (
+          <div className="max-w-2xl mb-10">
+            <h2 className="text-3xl md:text-4xl font-display font-extrabold">{title}</h2>
+            {subtitle && <p className="mt-3 text-muted-foreground">{subtitle}</p>}
+          </div>
+        )}
+        {children}
+      </div>
+    </section>
+  );
+}
 
 function About() {
   const kerala = BRANCHES.filter((b) => b.state === "Kerala").length;
@@ -57,17 +125,10 @@ function About() {
             </p>
           </div>
           <div className="grid grid-cols-2 gap-4">
-            {[
-              { k: `${BRANCHES.length}`, v: "Branches" },
-              { k: `${LOANS.length}`, v: "Loan products" },
-              { k: `${kerala}`, v: "Branches in Kerala" },
-              { k: `${tamilNadu}`, v: "Branches in Tamil Nadu" },
-            ].map((s) => (
-              <div key={s.v} className="rounded-3xl bg-gradient-brand text-white p-6 shadow-soft">
-                <div className="text-3xl md:text-4xl font-display font-extrabold">{s.k}</div>
-                <div className="mt-1 text-white/80 text-sm">{s.v}</div>
-              </div>
-            ))}
+            <StatCard value={BRANCHES.length} label="Branches" />
+            <StatCard value={LOANS.length} label="Loan products" />
+            <StatCard value={kerala} label="Branches in Kerala" />
+            <StatCard value={tamilNadu} label="Branches in Tamil Nadu" />
           </div>
         </div>
       </Section>
@@ -144,18 +205,3 @@ function About() {
   );
 }
 
-function Section({ title, subtitle, children }: any) {
-  return (
-    <section className="py-16 md:py-24">
-      <div className="container-x">
-        {title && (
-          <div className="max-w-2xl mb-10">
-            <h2 className="text-3xl md:text-4xl font-display font-extrabold">{title}</h2>
-            {subtitle && <p className="mt-3 text-muted-foreground">{subtitle}</p>}
-          </div>
-        )}
-        {children}
-      </div>
-    </section>
-  );
-}

@@ -29,7 +29,7 @@ export function SiteFooter() {
 
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8">
           <div className="col-span-2 lg:col-span-2">
-            <Logo mono />
+            <Logo className="h-32 w-32 md:h-40 md:w-40" />
             <p className="mt-4 text-sm text-white/70 max-w-sm">
               Tattva Fincorp Limited is an RBI-registered NBFC offering eight loan products with rapid processing, transparent pricing and genuine support across Kerala and Tamil Nadu.
             </p>
@@ -64,9 +64,7 @@ export function SiteFooter() {
             <FooterLink to="/about">About Us</FooterLink>
             <FooterLink to="/investor-relations">Investor Relations</FooterLink>
             <FooterLink to="/careers">Careers</FooterLink>
-            <FooterLink to="/news">News & Media</FooterLink>
             <FooterLink to="/csr">CSR</FooterLink>
-            
           </FooterCol>
 
           <FooterCol title="Support">
