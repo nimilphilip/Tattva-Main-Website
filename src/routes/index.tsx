@@ -1,12 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useRef, useState, useMemo } from "react";
+import { useEffect, useRef, useState, useMemo, type FormEvent } from "react";
 import {
   ArrowRight, ShieldCheck, Zap, BadgePercent, MapPin,
   ChevronRight, Search, TrendingUp, HeadphonesIcon,
   CheckCircle2, FileText, Wallet, Sparkles, Navigation, ExternalLink,
 } from "lucide-react";
 import { LOANS } from "@/lib/loans";
-import { BRANCHES, BRANCH_COORDINATES } from "@/lib/branches";
+import { BRANCHES, BRANCH_COORDINATES, distanceInKm } from "@/lib/branches";
 import { FAQS } from "@/lib/faqs";
 import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
@@ -330,15 +330,83 @@ function CtaBanner() {
 function BranchPreview() {
   const [selectedBranch, setSelectedBranch] = useState(BRANCHES[0]);
   const [search, setSearch] = useState("");
+  const [nearestBranch, setNearestBranch] = useState<(typeof BRANCHES)[number] | null>(null);
+  const [nearestDistance, setNearestDistance] = useState<number | null>(null);
+  const [lookupStatus, setLookupStatus] = useState<"idle" | "loading" | "error">("idle");
 
   const displayedList = useMemo(() => {
     const q = search.trim().toLowerCase();
+    if (nearestBranch && /^\d{6}$/.test(q)) {
+      return [nearestBranch, ...BRANCHES.filter((branch) => branch.city !== nearestBranch.city)].slice(0, 5);
+    }
     if (!q) return BRANCHES.slice(0, 5);
-    const matched = BRANCHES.filter(
-      (b) => b.city.toLowerCase().includes(q) || b.addr.toLowerCase().includes(q)
+    return BRANCHES.filter(
+      (branch) => branch.city.toLowerCase().includes(q) || branch.addr.toLowerCase().includes(q),
+    ).slice(0, 5);
+  }, [nearestBranch, search]);
+
+  async function findBranch(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const query = search.trim();
+
+    if (!query) {
+      setNearestBranch(null);
+      setNearestDistance(null);
+      setLookupStatus("idle");
+      return;
+    }
+
+    if (/^\d{6}$/.test(query)) {
+      setLookupStatus("loading");
+      setNearestBranch(null);
+      setNearestDistance(null);
+
+      try {
+        const response = await fetch(
+          `https://nominatim.openstreetmap.org/search?postalcode=${encodeURIComponent(query)}&country=India&format=jsonv2&limit=1`,
+        );
+        const locations: Array<{ lat: string; lon: string }> = await response.json();
+        const location = locations[0];
+
+        if (!response.ok || !location) throw new Error("PIN code not found");
+
+        const pinLocation = { lat: Number(location.lat), lon: Number(location.lon) };
+        const closestBranch = BRANCHES.map((branch) => ({
+          branch,
+          distance: distanceInKm(pinLocation, BRANCH_COORDINATES[branch.city]),
+        })).sort((first, second) => first.distance - second.distance)[0];
+
+        if (!closestBranch) throw new Error("No branches available");
+
+        setNearestBranch(closestBranch.branch);
+        setNearestDistance(closestBranch.distance);
+        setSelectedBranch(closestBranch.branch);
+        setLookupStatus("idle");
+      } catch {
+        setNearestBranch(null);
+        setNearestDistance(null);
+        setLookupStatus("error");
+      }
+
+      return;
+    }
+
+    const normalizedQuery = query.toLowerCase();
+    const matchingBranch = BRANCHES.find(
+      (branch) =>
+        branch.city.toLowerCase().includes(normalizedQuery) ||
+        branch.addr.toLowerCase().includes(normalizedQuery),
     );
-    return matched.length > 0 ? matched : BRANCHES.slice(0, 5);
-  }, [search]);
+
+    setNearestBranch(null);
+    setNearestDistance(null);
+    if (matchingBranch) {
+      setSelectedBranch(matchingBranch);
+      setLookupStatus("idle");
+    } else {
+      setLookupStatus("error");
+    }
+  }
 
   const coords = BRANCH_COORDINATES[selectedBranch.city] ?? { lat: 9.9997, lon: 76.3205 };
 
@@ -356,17 +424,35 @@ function BranchPreview() {
       <div className="rounded-3xl border border-border bg-card p-6 md:p-8 grid md:grid-cols-3 gap-6 shadow-soft items-stretch">
         <div className="md:col-span-1 flex flex-col justify-between space-y-4">
           <div className="space-y-3">
-            <Input
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Enter city or PIN code"
-              className="h-12 rounded-xl"
-            />
-            <Link to="/branches">
-              <Button className="w-full h-12 rounded-xl bg-gradient-brand text-white">
-                Search all branches
+            <form onSubmit={findBranch} className="space-y-3">
+              <Input
+                value={search}
+                onChange={(event) => {
+                  setSearch(event.target.value);
+                  setNearestBranch(null);
+                  setNearestDistance(null);
+                  setLookupStatus("idle");
+                }}
+                placeholder="Enter city or 6-digit PIN code"
+                className="h-12 rounded-xl"
+              />
+              <Button type="submit" disabled={lookupStatus === "loading"} className="w-full h-12 rounded-xl bg-gradient-brand text-white">
+                {lookupStatus === "loading" ? "Finding nearest branch..." : "Find branch"}
               </Button>
-            </Link>
+            </form>
+            {lookupStatus === "error" && (
+              <p className="text-sm text-destructive">
+                We couldn&apos;t find a location. Enter a valid 6-digit PIN code or a branch city.
+              </p>
+            )}
+            {nearestBranch && nearestDistance !== null && (
+              <div className="rounded-xl border border-gold/40 bg-gold/10 p-3 text-sm">
+                <div className="font-semibold text-foreground">Nearest branch: {nearestBranch.city}</div>
+                <div className="mt-1 text-xs text-muted-foreground">
+                  Approximately {nearestDistance.toFixed(1)} km from PIN code {search.trim()}.
+                </div>
+              </div>
+            )}
             <div className="pt-2 space-y-1 text-sm">
               <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">
                 Click a branch to preview
@@ -396,6 +482,11 @@ function BranchPreview() {
                   </button>
                 );
               })}
+              {displayedList.length === 0 && (
+                <p className="rounded-xl border border-border p-3 text-xs text-muted-foreground">
+                  No branches match your search. Try a city name or PIN code.
+                </p>
+              )}
             </div>
           </div>
 
